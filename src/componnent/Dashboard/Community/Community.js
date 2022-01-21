@@ -88,7 +88,7 @@ const Community = () => {
             },
           }}
         >
-          {plus} <span style={{ marginLeft: 10 }}>Add a Leader</span>
+          {plus} <span style={{ marginLeft: 10 }}>Add Leader</span>
         </Button>
         <AddLeader open={open} handleClose={handleClose}></AddLeader>
       </Box>

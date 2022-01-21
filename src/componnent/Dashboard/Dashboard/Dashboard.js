@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -38,6 +38,8 @@ function Dashboard(props) {
   const [activeCommunity, setActiveCommunity] = React.useState(false);
   const [activeEvent, setEvent] = React.useState(false);
   const [activeCommunityList, setCommunityList] = React.useState(false);
+  const location = useLocation();
+  const currPath = location.pathname.split('/')[2]
 
   const displayA = () => {
     setActive(true);
@@ -74,6 +76,26 @@ function Dashboard(props) {
     setEvent(false);
     setCommunityList(true);
   };
+
+  useEffect(() => {
+    switch (currPath) {
+      case "userlist":
+        displayB()
+        break;
+      case "community":
+        displayC()
+        break;
+      case "event":
+        displayD()
+        break;
+      case "communitylist":
+        displayE()
+        break;
+      default:
+        displayA()
+        break;
+    }
+  }, [currPath])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -420,7 +442,7 @@ function Dashboard(props) {
       {renderMenu}
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }, borderRight: 0 }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}

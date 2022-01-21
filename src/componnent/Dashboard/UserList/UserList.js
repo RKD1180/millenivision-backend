@@ -51,7 +51,7 @@ const UserList = () => {
       .then((data) => {
         setUserList(data.user);
       });
-  }, [userInfo.token]);
+  }, [userInfo.user.token]);
 
   return (
     <TableContainer component={Paper}>

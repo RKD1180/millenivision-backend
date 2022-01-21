@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-
+import Dialog from '@mui/material/Dialog';
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -12,18 +12,18 @@ import Alert from "@mui/material/Alert";
 
 import { Divider } from "@mui/material";
 
-const style = {
-  position: "absolute",
-  top: "133rem",
-  left: "41%",
-  transform: "translate(-50%, -50%)",
-  width: 450,
-  bgcolor: "background.paper",
-  borderRadius: 2,
-  boxShadow: 24,
-  p: 4,
-  marginTop: 165,
-};
+// const style = {
+//   position: "absolute",
+//   top: "133rem",
+//   left: "41%",
+//   transform: "translate(-50%, -50%)",
+//   width: 450,
+//   bgcolor: "background.paper",
+//   borderRadius: 2,
+//   boxShadow: 24,
+//   p: 4,
+//   marginTop: 165,
+// };
 
 const AddLeader = ({ open, handleClose }) => {
   const [userList, setUserList] = useState([]);
@@ -63,14 +63,14 @@ const AddLeader = ({ open, handleClose }) => {
 
   return (
     <div>
-      <Modal
+      <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        sx={{ border: "none", overflow: "scroll" }}
+        // aria-labelledby="modal-modal-title"
+        // aria-describedby="modal-modal-description"
+        // sx={{ border: "none", overflow: "scroll" }}
       >
-        <Box sx={style}>
+        <Box style={{padding: "30px"}}>
           <Box
             sx={{
               display: "flex",
@@ -79,6 +79,7 @@ const AddLeader = ({ open, handleClose }) => {
             }}
           >
             <Button
+              onClick={handleClose}
               sx={{ fontSize: 15, textTransform: "capitalize" }}
               variant="text"
             >
@@ -98,7 +99,6 @@ const AddLeader = ({ open, handleClose }) => {
               Confirm
             </Button>
           </Box>
-          {/* search */}
           <Paper
             elevation={3}
             component="form"
@@ -163,7 +163,7 @@ const AddLeader = ({ open, handleClose }) => {
             </>
           ))}
         </Box>
-      </Modal>
+      </Dialog>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,8 +10,6 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
-
-import avatar from "../../../img/man.png";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,49 +32,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData(
-    avatar,
-    "American Sitcom",
-    "50",
-    "Shakilhasan055@gmail.com",
-    "115"
-  ),
-  createData(
-    avatar,
-    "American Sitcom",
-    "50",
-    "Shakilhasan055@gmail.com",
-    "115"
-  ),
-  createData(
-    avatar,
-    "American Sitcom",
-    "50",
-    "Shakilhasan055@gmail.com",
-    "115"
-  ),
-  createData(
-    avatar,
-    "American Sitcom",
-    "50",
-    "Shakilhasan055@gmail.com",
-    "115"
-  ),
-  createData(
-    avatar,
-    "American Sitcom",
-    "50",
-    "Shakilhasan055@gmail.com",
-    "115"
-  ),
-];
-
 const CommunityList = () => {
+  const [eventList, setEventList] = useState([]);
+
+  const userInfo = window.localStorage.getItem("userInfo")
+    ? JSON.parse(window.localStorage.getItem("userInfo"))
+    : null;
+
+  useEffect(() => {
+    fetch(`https://safe-journey-75946.herokuapp.com/api/community-events/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${userInfo.user.token}`, //requerd
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setEventList(data.communityEvent);
+      });
+  }, [userInfo.user.token]);
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundColor: "#F5F4F4" }}>
@@ -112,7 +88,7 @@ const CommunityList = () => {
             }}
             color="error"
           >
-            Total 50 Community List
+            Total {eventList?.length} Event
           </Button>
         </Box>
       </Box>
@@ -125,43 +101,41 @@ const CommunityList = () => {
             <StyledTableCell style={{ color: "#33594A" }}>
               Community Name
             </StyledTableCell>
-            <StyledTableCell style={{ color: "#33594A", paddingLeft: 1 }}>
+            <StyledTableCell style={{ color: "#33594A" }}>
               Total Event
             </StyledTableCell>
-            <StyledTableCell style={{ color: "#33594A", paddingLeft: 40 }}>
+            <StyledTableCell style={{ color: "#33594A" }}>
               Leader Email
             </StyledTableCell>
-            <StyledTableCell style={{ color: "#33594A", paddingLeft: 1 }}>
+            <StyledTableCell style={{ color: "#33594A" }}>
               Total Member
             </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {eventList?.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
-                <img src={row.name} style={{ height: 40, width: 40 }} alt="" />
-                <Box sx={{ mt: -5, ml: 3 }}>
-                  <span style={{ marginLeft: 40, color: "#565555" }}>
-                    {row.calories}{" "}
-                  </span>
-                  <br />
-                  <span
-                    style={{ color: "#8D8D8D", marginLeft: 40, fontSize: 12 }}
-                  >
-                    American Sitcom
-                  </span>
-                </Box>
+                <img
+                  src={row.event_image}
+                  style={{ height: 30, width: 30 }}
+                  alt=""
+                />
               </StyledTableCell>
-
-              <StyledTableCell sx={{ color: "#565555" }}>
-                {row.fat}
+              {/* <StyledTableCell sx={{ color: "#DD502C" }}>
+                {row.event_name} <br />
+                <span style={{ color: "#8D8D8D" }}>
+                  {row.createdAt.slice(0, 10)}
+                </span>
+              </StyledTableCell> */}
+              <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
+                {row.list_of_communities.length}
               </StyledTableCell>
               <StyledTableCell sx={{ color: "#565555" }}>
-                {row.carbs}
+                test@example.com
               </StyledTableCell>
               <StyledTableCell sx={{ color: "#565555" }}>
-                {row.protein}
+                {row?.join_people?.totalMember}
               </StyledTableCell>
             </StyledTableRow>
           ))}

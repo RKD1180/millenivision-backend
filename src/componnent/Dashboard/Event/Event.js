@@ -120,7 +120,7 @@ const Event = () => {
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
                 <img
-                  src={row.event_Image}
+                  src={row.event_image}
                   style={{ height: 30, width: 30 }}
                   alt=""
                 />
