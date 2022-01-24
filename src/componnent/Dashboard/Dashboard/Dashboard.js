@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -31,6 +31,8 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 const drawerWidth = 320;
 
 function Dashboard(props) {
+  const navigate = useNavigate();
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [active, setActive] = React.useState(false);
@@ -39,7 +41,7 @@ function Dashboard(props) {
   const [activeEvent, setEvent] = React.useState(false);
   const [activeCommunityList, setCommunityList] = React.useState(false);
   const location = useLocation();
-  const currPath = location.pathname.split('/')[2]
+  const currPath = location.pathname.split("/")[2];
 
   const displayA = () => {
     setActive(true);
@@ -80,26 +82,36 @@ function Dashboard(props) {
   useEffect(() => {
     switch (currPath) {
       case "userlist":
-        displayB()
+        displayB();
         break;
       case "community":
-        displayC()
+        displayC();
         break;
       case "event":
-        displayD()
+        displayD();
         break;
       case "communitylist":
-        displayE()
+        displayE();
         break;
       default:
-        displayA()
+        displayA();
         break;
     }
-  }, [currPath])
+  }, [currPath]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  // const userInfo = window?.localStorage?.getItem("userInfo")
+  //   ? JSON.parse(window?.localStorage?.getItem("userInfo"))
+  //   : null;
+
+  // useEffect(() => {
+  //   if (!userInfo?.user?.token) {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   const drawer = (
     <div style={{ marginLeft: 7 }}>
@@ -321,7 +333,7 @@ function Dashboard(props) {
         vertical: "top",
         horizontal: "right",
       }}
-      backgroundColor="#200E32"
+      backgroundcolor="#200E32"
       id={menuId}
       keepMounted
       transformOrigin={{
@@ -406,7 +418,7 @@ function Dashboard(props) {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" aria-label="show 17 new notifications">
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={1} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -442,7 +454,11 @@ function Dashboard(props) {
       {renderMenu}
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }, borderRight: 0 }}
+        sx={{
+          width: { sm: drawerWidth },
+          flexShrink: { sm: 0 },
+          borderRight: 0,
+        }}
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}

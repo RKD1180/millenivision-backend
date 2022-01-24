@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F5F4F4",
+    backgroundcolor: "#F5F4F4",
     color: "black",
   },
   [`&.${tableCellClasses.body}`]: {
@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+    backgroundcolor: theme.palette.action.hover,
   },
   // hide last border
   "&:last-child td, &:last-child th": {
@@ -49,13 +49,12 @@ const CommunityList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setEventList(data.communityEvent);
       });
   }, [userInfo.user.token]);
   return (
     <TableContainer component={Paper}>
-      <Box sx={{ backgroundColor: "#F5F4F4" }}>
+      <Box sx={{ backgroundcolor: "#F5F4F4" }}>
         <Box>
           <Typography
             variant="h4"
@@ -93,16 +92,19 @@ const CommunityList = () => {
         </Box>
       </Box>
       <Table
-        sx={{ minWidth: 700, backgroundColor: "#F5F4F4" }}
+        sx={{ minWidth: 700, backgroundcolor: "#F5F4F4" }}
         aria-label="customized table"
       >
         <TableHead>
           <TableRow>
             <StyledTableCell style={{ color: "#33594A" }}>
-              Community Name
+              Profile
             </StyledTableCell>
             <StyledTableCell style={{ color: "#33594A" }}>
               Total Event
+            </StyledTableCell>
+            <StyledTableCell style={{ color: "#33594A" }}>
+              Community
             </StyledTableCell>
             <StyledTableCell style={{ color: "#33594A" }}>
               Leader Email
@@ -114,7 +116,7 @@ const CommunityList = () => {
         </TableHead>
         <TableBody>
           {eventList?.map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row._id}>
               <StyledTableCell component="th" scope="row">
                 <img
                   src={row.event_image}
@@ -122,12 +124,12 @@ const CommunityList = () => {
                   alt=""
                 />
               </StyledTableCell>
-              {/* <StyledTableCell sx={{ color: "#DD502C" }}>
+              <StyledTableCell sx={{ color: "#DD502C" }}>
                 {row.event_name} <br />
                 <span style={{ color: "#8D8D8D" }}>
                   {row.createdAt.slice(0, 10)}
                 </span>
-              </StyledTableCell> */}
+              </StyledTableCell>
               <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
                 {row.list_of_communities.length}
               </StyledTableCell>

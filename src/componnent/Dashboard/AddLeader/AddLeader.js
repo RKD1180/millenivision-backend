@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Dialog from '@mui/material/Dialog';
+import Dialog from "@mui/material/Dialog";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -70,7 +70,7 @@ const AddLeader = ({ open, handleClose }) => {
         // aria-describedby="modal-modal-description"
         // sx={{ border: "none", overflow: "scroll" }}
       >
-        <Box style={{padding: "30px"}}>
+        <Box style={{ padding: "30px" }}>
           <Box
             sx={{
               display: "flex",

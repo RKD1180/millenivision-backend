@@ -5,6 +5,7 @@ import UserList from "./componnent/Dashboard/UserList/UserList";
 import Community from "./componnent/Dashboard/Community/Community";
 import Event from "./componnent/Dashboard/Event/Event";
 import CommunityList from "./componnent/Dashboard/CommunityList/CommunityList";
+import Home from "./componnent/Home/Home";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />}></Route>
-          <Route element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="/dashboard/userlist" element={<UserList />} />
             <Route path="/dashboard/community" element={<Community />} />

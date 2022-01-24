@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F5F4F4",
+    backgroundcolor: "#F5F4F4",
     color: "black",
   },
   [`&.${tableCellClasses.body}`]: {
@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+    backgroundcolor: theme.palette.action.hover,
   },
   // hide last border
   "&:last-child td, &:last-child th": {
@@ -55,7 +55,7 @@ const UserList = () => {
 
   return (
     <TableContainer component={Paper}>
-      <Box sx={{ backgroundColor: "#F5F4F4" }}>
+      <Box sx={{ backgroundcolor: "#F5F4F4" }}>
         <Box>
           <Typography
             variant="h4"
@@ -93,7 +93,7 @@ const UserList = () => {
         </Box>
       </Box>
       <Table
-        sx={{ minWidth: 700, backgroundColor: "#F5F4F4" }}
+        sx={{ minWidth: 700, backgroundcolor: "#F5F4F4" }}
         aria-label="customized table"
       >
         <TableHead>

@@ -13,7 +13,7 @@ import { Button } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#F5F4F4",
+    backgroundcolor: "#F5F4F4",
     color: "black",
   },
   [`&.${tableCellClasses.body}`]: {
@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+    backgroundcolor: theme.palette.action.hover,
   },
   // hide last border
   "&:last-child td, &:last-child th": {
@@ -34,12 +34,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Event = () => {
   const [eventList, setEventList] = useState([]);
+  const [isloading, setIsLoading] = useState(false);
 
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/api/events/`, {
       method: "GET",
       headers: {
@@ -49,13 +51,13 @@ const Event = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setEventList(data.event);
       });
+    setIsLoading(false);
   }, [userInfo.user.token]);
   return (
     <TableContainer component={Paper}>
-      <Box sx={{ backgroundColor: "#F5F4F4" }}>
+      <Box sx={{ backgroundcolor: "#F5F4F4" }}>
         <Box>
           <Typography
             variant="h4"
@@ -93,7 +95,7 @@ const Event = () => {
         </Box>
       </Box>
       <Table
-        sx={{ minWidth: 700, backgroundColor: "#F5F4F4" }}
+        sx={{ minWidth: 700, backgroundcolor: "#F5F4F4" }}
         aria-label="customized table"
       >
         <TableHead>
@@ -110,14 +112,14 @@ const Event = () => {
             <StyledTableCell style={{ color: "#33594A", paddingLeft: 69 }}>
               Email
             </StyledTableCell>
-            <StyledTableCell style={{ color: "#33594A", paddingLeft: 31 }}>
-              Phone
+            <StyledTableCell style={{ color: "#33594A", paddingLeft: 8 }}>
+              Total Event
             </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {eventList.map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row._id}>
               <StyledTableCell component="th" scope="row">
                 <img
                   src={row.event_image}
@@ -135,10 +137,10 @@ const Event = () => {
                 {row.list_of_communities.length}
               </StyledTableCell>
               <StyledTableCell sx={{ color: "#565555" }}>
-                {row.carbs}
+                test@example.com
               </StyledTableCell>
               <StyledTableCell sx={{ color: "#565555" }}>
-                {row.protein}
+                {row?.join_people?.totalMember}
               </StyledTableCell>
             </StyledTableRow>
           ))}

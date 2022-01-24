@@ -44,7 +44,7 @@ const Login = () => {
             window.location.replace("/dashboard");
             localStorage.setItem("userInfo", JSON.stringify(data));
           } else {
-            setError(data.message);
+            setError(data.error);
           }
         });
     }
@@ -54,7 +54,7 @@ const Login = () => {
     const userInfo = window.localStorage.getItem("userInfo")
       ? JSON.parse(window.localStorage.getItem("userInfo"))
       : null;
-    if (userInfo) {
+    if (userInfo?.user?.token) {
       navigate("/dashboard");
     }
   }, [navigate]);
@@ -145,7 +145,7 @@ const Login = () => {
                   <Button
                     variant="contained"
                     type="submit"
-                    sx={{ backgroundColor: "#33594A", marginLeft: 1 }}
+                    sx={{ backgroundcolor: "#33594A", marginLeft: 1 }}
                   >
                     Log in
                   </Button>
