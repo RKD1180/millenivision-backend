@@ -27,30 +27,36 @@ import { Divider } from "@mui/material";
 
 const AddLeader = ({ open, handleClose }) => {
   const [userList, setUserList] = useState([]);
+  const [searchUser, setSearchUser] = useState([]);
+  const [inputUser, setInputUser] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`, //requerd
+        authorization: `Bearer ${userInfo.user.token}`,
       },
     })
       .then((res) => res.json())
       .then((data) => setUserList(data.user));
-  }, [userInfo.user.token]);
+
+    setIsLoading(false);
+  }, [userInfo?.user?.token, isLoading]);
 
   const handleMakeAdmin = (email) => {
     fetch(`https://safe-journey-75946.herokuapp.com/users/makeAdmin/${email}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.token}`,
+        authorization: `Bearer ${userInfo?.user?.token}`,
       },
     })
       .then((res) => res.json())
@@ -60,6 +66,27 @@ const AddLeader = ({ open, handleClose }) => {
         }
       });
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${userInfo.user.token}`, //requerd
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setSearchUser(data.user));
+
+    setIsLoading(false);
+  }, [userInfo?.user?.token, isLoading]);
+
+  if (searchUser) {
+    const filterUser = searchUser.filter(
+      (user) => user.includes(user.name?.toString()) === inputUser.toString()
+    );
+  }
 
   return (
     <div>
@@ -117,6 +144,7 @@ const AddLeader = ({ open, handleClose }) => {
               sx={{ ml: 1, flex: 1 }}
               placeholder="Search"
               inputProps={{ "aria-label": "search google maps" }}
+              onChange={(e) => setInputUser(e.target.value)}
             />
           </Paper>
           <Typography
