@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import SearchIcon from "@mui/icons-material/Search";
+import { Divider } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import Dialog from "@mui/material/Dialog";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import Alert from "@mui/material/Alert";
+import InputBase from "@mui/material/InputBase";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
 
-import { Divider } from "@mui/material";
 
 // const style = {
 //   position: "absolute",
@@ -77,25 +77,30 @@ const AddLeader = ({ open, handleClose }) => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setSearchUser(data.user));
+      .then((data) => {
+        setSearchUser(data.user)
 
+      });
     setIsLoading(false);
-  }, [userInfo?.user?.token, isLoading]);
-
-  if (searchUser) {
-    const filterUser = searchUser.filter(
-      (user) => user.includes(user.name?.toString()) === inputUser.toString()
-    );
-  }
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    setIsLoading(true)
+    if (searchUser?.length) {
+      const searchFilter = searchUser.filter(s => s.first_name.toLowerCase().includes(inputUser.toLowerCase()));
+      setUserList(searchFilter)
+      // console.log(searchFilter)
+      setIsLoading(false)
+    }
+  }, [inputUser])
   return (
     <div>
       <Dialog
         open={open}
         onClose={handleClose}
-        // aria-labelledby="modal-modal-title"
-        // aria-describedby="modal-modal-description"
-        // sx={{ border: "none", overflow: "scroll" }}
+      // aria-labelledby="modal-modal-title"
+      // aria-describedby="modal-modal-description"
+      // sx={{ border: "none", overflow: "scroll" }}
       >
         <Box style={{ padding: "30px" }}>
           <Box
