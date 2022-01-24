@@ -1,12 +1,11 @@
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Alert, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-
-import React, { useState, useEffect } from "react";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import logo from "../../img/logo.png";
 
 const Login = () => {
@@ -24,9 +23,7 @@ const Login = () => {
 
   const handleLoginSubmit = (e) => {
     const { email, password } = userData;
-
     e.preventDefault();
-
     if (email && password) {
       fetch("https://safe-journey-75946.herokuapp.com/users/login", {
         method: "POST",
@@ -41,24 +38,21 @@ const Login = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.user?.token) {
-            window.location.replace("/dashboard");
-            localStorage.setItem("userInfo", JSON.stringify(data));
+            localStorage?.setItem("userInfo", JSON.stringify(data));
+            navigate('/dashboard')
           } else {
             setError(data.error);
           }
         });
     }
   };
-
+  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  // console.log(userInfo)
   useEffect(() => {
-    const userInfo = window.localStorage.getItem("userInfo")
-      ? JSON.parse(window.localStorage.getItem("userInfo"))
-      : null;
-    if (userInfo?.user?.token) {
-      navigate("/dashboard");
+    if (userInfo?.user) {
+      navigate('/dashboard')
     }
-  }, [navigate]);
-
+  }, [userInfo?.user])
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>

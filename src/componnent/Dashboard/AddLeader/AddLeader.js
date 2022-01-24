@@ -10,6 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 // const style = {
@@ -93,6 +94,13 @@ const AddLeader = ({ open, handleClose }) => {
       setIsLoading(false)
     }
   }, [inputUser])
+  const navigate = useNavigate()  
+  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  useEffect(() => {
+    if (!userInfobee?.user) {
+      navigate('/')
+    }
+  }, [userInfobee?.user])
   return (
     <div>
       <Dialog

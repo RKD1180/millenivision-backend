@@ -1,6 +1,16 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import EventIcon from "@mui/icons-material/Event";
+import HomeIcon from "@mui/icons-material/Home";
+import MenuIcon from "@mui/icons-material/Menu";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import PersonIcon from "@mui/icons-material/Person";
 import AppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Drawer from "@mui/material/Drawer";
@@ -8,30 +18,21 @@ import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import Badge from "@mui/material/Badge";
-import PersonIcon from "@mui/icons-material/Person";
-import HomeIcon from "@mui/icons-material/Home";
-
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
 import avatar from "../../../img/man.png";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import EventIcon from "@mui/icons-material/Event";
-import ApartmentIcon from "@mui/icons-material/Apartment";
+
+
+
 
 const drawerWidth = 320;
 
 function Dashboard(props) {
-  const navigate = useNavigate();
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -102,17 +103,13 @@ function Dashboard(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  // const userInfo = window?.localStorage?.getItem("userInfo")
-  //   ? JSON.parse(window?.localStorage?.getItem("userInfo"))
-  //   : null;
-
-  // useEffect(() => {
-  //   if (!userInfo?.user?.token) {
-  //     navigate("/");
-  //   }
-  // }, []);
-
+  const navigate = useNavigate()  
+  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  useEffect(() => {
+    if (!userInfo?.user) {
+      navigate('/')
+    }
+  }, [userInfo?.user])
   const drawer = (
     <div style={{ marginLeft: 7 }}>
       <Box sx={{ mt: 2, mb: 5 }}>
@@ -129,13 +126,13 @@ function Dashboard(props) {
             style={
               active
                 ? {
-                    backgroundColor: "#C4C4C4",
-                    width: "75%",
-                    borderRadius: 16,
-                    paddingLeft: 33,
-                    color: "#DD502C",
-                    transition: 0.2,
-                  }
+                  backgroundColor: "#C4C4C4",
+                  width: "75%",
+                  borderRadius: 16,
+                  paddingLeft: 33,
+                  color: "#DD502C",
+                  transition: 0.2,
+                }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -162,13 +159,13 @@ function Dashboard(props) {
             style={
               activeUser
                 ? {
-                    backgroundColor: "#C4C4C4",
-                    width: "75%",
-                    borderRadius: 16,
-                    paddingLeft: 33,
-                    color: "#DD502C",
-                    transition: 0.2,
-                  }
+                  backgroundColor: "#C4C4C4",
+                  width: "75%",
+                  borderRadius: 16,
+                  paddingLeft: 33,
+                  color: "#DD502C",
+                  transition: 0.2,
+                }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -198,13 +195,13 @@ function Dashboard(props) {
             style={
               activeCommunity
                 ? {
-                    backgroundColor: "#C4C4C4",
-                    width: "75%",
-                    borderRadius: 16,
-                    paddingLeft: 33,
-                    color: "#DD502C",
-                    transition: 0.2,
-                  }
+                  backgroundColor: "#C4C4C4",
+                  width: "75%",
+                  borderRadius: 16,
+                  paddingLeft: 33,
+                  color: "#DD502C",
+                  transition: 0.2,
+                }
                 : { paddingLeft: 33, color: "#33594A" }
             }
           >
@@ -234,13 +231,13 @@ function Dashboard(props) {
             style={
               activeEvent
                 ? {
-                    backgroundColor: "#C4C4C4",
-                    width: "75%",
-                    borderRadius: 16,
-                    paddingLeft: 33,
-                    color: "#DD502C",
-                    transition: 0.2,
-                  }
+                  backgroundColor: "#C4C4C4",
+                  width: "75%",
+                  borderRadius: 16,
+                  paddingLeft: 33,
+                  color: "#DD502C",
+                  transition: 0.2,
+                }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -271,13 +268,13 @@ function Dashboard(props) {
             style={
               activeCommunityList
                 ? {
-                    backgroundColor: "#C4C4C4",
-                    width: "75%",
-                    borderRadius: 16,
-                    paddingLeft: 33,
-                    color: "#DD502C",
-                    transition: 0.2,
-                  }
+                  backgroundColor: "#C4C4C4",
+                  width: "75%",
+                  borderRadius: 16,
+                  paddingLeft: 33,
+                  color: "#DD502C",
+                  transition: 0.2,
+                }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >

@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,10 +37,7 @@ const Event = () => {
   const [eventList, setEventList] = useState([]);
   const [isloading, setIsLoading] = useState(false);
 
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
-
+  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
   useEffect(() => {
     setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/api/events/`, {
@@ -54,7 +52,14 @@ const Event = () => {
         setEventList(data.event);
       });
     setIsLoading(false);
-  }, [userInfo.user.token]);
+  }, [userInfo?.user?.token,isloading]);
+  const navigate = useNavigate()  
+  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  useEffect(() => {
+    if (!userInfobee?.user) {
+      navigate('/')
+    }
+  }, [userInfobee?.user])
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>

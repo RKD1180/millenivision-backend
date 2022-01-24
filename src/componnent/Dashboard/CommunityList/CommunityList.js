@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -10,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,6 +54,13 @@ const CommunityList = () => {
         setEventList(data.communityEvent);
       });
   }, [userInfo.user.token]);
+  const navigate = useNavigate()  
+  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  useEffect(() => {
+    if (!userInfobee?.user) {
+      navigate('/')
+    }
+  }, [userInfobee?.user])
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>

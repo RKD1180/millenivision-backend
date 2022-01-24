@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -22,6 +23,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddLeader from "../AddLeader/AddLeader";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -71,7 +73,13 @@ const Community = () => {
         setLeaderList(data.user);
       });
   }, [userInfo.user.token]);
-
+  const navigate = useNavigate()  
+  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  useEffect(() => {
+    if (!userInfobee?.user) {
+      navigate('/')
+    }
+  }, [userInfobee?.user])
   return (
     <Box>
       <Box>
