@@ -57,7 +57,7 @@ const UserList = () => {
   const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/')
+      navigate('/login')
     }
   }, [userInfobee?.user])
   return (

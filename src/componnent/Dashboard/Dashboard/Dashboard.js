@@ -107,7 +107,7 @@ function Dashboard(props) {
   const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
   useEffect(() => {
     if (!userInfo?.user) {
-      navigate('/')
+      navigate('/login')
     }
   }, [userInfo?.user])
   const drawer = (
