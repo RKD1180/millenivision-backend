@@ -8,6 +8,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../img/logo.png";
 
+import CircularProgress from "@mui/material/CircularProgress";
+import { green } from "@mui/material/colors";
+
 const Login = () => {
   const [error, setError] = useState("");
   const [userData, setUserData] = useState({});
@@ -21,7 +24,38 @@ const Login = () => {
     setUserData(newData);
   };
 
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const timer = React.useRef();
+
+  const buttonSx = {
+    ...(success && {
+      bgcolor: green[500],
+      "&:hover": {
+        bgcolor: green[700],
+      },
+    }),
+  };
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+      timer.current = window.setTimeout(() => {
+        setSuccess(true);
+        setLoading(false);
+      }, 2000);
+    }
+  };
+
   const handleLoginSubmit = (e) => {
+    handleButtonClick();
     const { email, password } = userData;
     e.preventDefault();
     if (email && password) {
@@ -37,22 +71,35 @@ const Login = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.user?.token) {
+          if (data.user?.isAdmin === true) {
             localStorage?.setItem("userInfo", JSON.stringify(data));
-            navigate('/dashboard')
+
+            fetch("https://safe-journey-75946.herokuapp.com/admin-otp-send", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${data.user?.token}`,
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                navigate("/otp");
+              });
           } else {
             setError(data.error);
           }
         });
     }
   };
-  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const userInfo = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   // console.log(userInfo)
   useEffect(() => {
     if (userInfo?.user) {
-      navigate('/dashboard')
+      navigate("/dashboard");
     }
-  }, [userInfo?.user])
+  }, [userInfo?.user]);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
@@ -118,8 +165,8 @@ const Login = () => {
                 sx={{ width: "75%" }}
                 size="small"
               />
-              <Box sx={{ display: "flex" }}>
-                <Grid md={6}>
+              <Box sx={{ display: "flex", position: "relative" }}>
+                <Grid item md={6}>
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Typography
                       variant="h6"
@@ -135,21 +182,35 @@ const Login = () => {
                       Forgot Password?
                     </Typography>
                   </Link>
-
                   <Button
                     variant="contained"
                     type="submit"
-                    sx={{ backgroundcolor: "#33594A", marginLeft: 1 }}
+                    sx={{ buttonSx, backgroundColor: "#33594A", marginLeft: 1 }}
+                    disabled={loading}
                   >
-                    Log in
+                    Login
                   </Button>
+                  {loading && (
+                    <CircularProgress
+                      size={24}
+                      sx={{
+                        color: green[500],
+                        position: "absolute",
+                        top: "78%",
+                        left: "10%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                      }}
+                    />
+                  )}
+
                   {error && (
                     <Alert sx={{ mt: 4 }} severity="error">
                       {error}
                     </Alert>
                   )}
                 </Grid>
-                <Grid md={6} sx={{ mt: 2, ml: 3 }}></Grid>
+                <Grid item md={6} sx={{ mt: 2, ml: 3 }}></Grid>
               </Box>
               <Typography
                 variant="h6"
@@ -201,10 +262,10 @@ const Login = () => {
           md={6}
           sx={{ background: "#FFEDE1", height: "100vh" }}
         >
-          <Grid xs={12} sx={{ mt: 20, ml: 10 }}>
+          <Grid item xs={12} sx={{ mt: 20, ml: 10 }}>
             <img src={logo} alt="" style={{ width: 216, height: 64 }} />
           </Grid>
-          <Grid xs={12} sx={{}}>
+          <Grid item xs={12} sx={{}}>
             <Typography
               variant="h6"
               sx={{

@@ -12,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 // const style = {
 //   position: "absolute",
 //   top: "133rem",
@@ -62,7 +61,7 @@ const AddLeader = ({ open, handleClose }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data._id) {
+        if (data.user?._id) {
           setSuccess(true);
         }
       });
@@ -79,36 +78,39 @@ const AddLeader = ({ open, handleClose }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setSearchUser(data.user)
-
+        setSearchUser(data.user);
       });
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     if (searchUser?.length) {
-      const searchFilter = searchUser.filter(s => s.first_name.toLowerCase().includes(inputUser.toLowerCase()));
-      setUserList(searchFilter)
+      const searchFilter = searchUser.filter((s) =>
+        s.first_name.toLowerCase().includes(inputUser.toLowerCase())
+      );
+      setUserList(searchFilter);
       // console.log(searchFilter)
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [inputUser])
-  const navigate = useNavigate()  
-  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  }, [inputUser]);
+  const navigate = useNavigate();
+  const userInfobee = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfobee?.user])
+  }, [userInfobee?.user]);
   return (
     <div>
       <Dialog
         open={open}
         onClose={handleClose}
-      // aria-labelledby="modal-modal-title"
-      // aria-describedby="modal-modal-description"
-      // sx={{ border: "none", overflow: "scroll" }}
+        // aria-labelledby="modal-modal-title"
+        // aria-describedby="modal-modal-description"
+        // sx={{ border: "none", overflow: "scroll" }}
       >
         <Box style={{ padding: "30px" }}>
           <Box
@@ -167,7 +169,9 @@ const AddLeader = ({ open, handleClose }) => {
           >
             SUGGESTED
           </Typography>
-          {success && <Alert severity="success">Admin Make Successfully</Alert>}
+          {success && (
+            <Alert severity="success">Community Leader Add Successfully</Alert>
+          )}
           {userList.map((user) => (
             <>
               <Box

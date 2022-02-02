@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,14 +38,16 @@ const Event = () => {
   const [eventList, setEventList] = useState([]);
   const [isloading, setIsLoading] = useState(false);
 
-  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const userInfo = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/api/events/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`, //requerd
+        authorization: `Bearer ${userInfo.user.token}`,
       },
     })
       .then((res) => res.json())
@@ -52,14 +55,18 @@ const Event = () => {
         setEventList(data.event);
       });
     setIsLoading(false);
-  }, [userInfo?.user?.token,isloading]);
-  const navigate = useNavigate()  
-  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  }, [userInfo?.user?.token, isloading]);
+
+  const navigate = useNavigate();
+  const userInfobee = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfobee?.user])
+  }, [navigate, userInfobee?.user]);
+
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>
@@ -123,32 +130,42 @@ const Event = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventList.map((row) => (
-            <StyledTableRow key={row._id}>
-              <StyledTableCell component="th" scope="row">
-                <img
-                  src={row.event_image}
-                  style={{ height: 30, width: 30 }}
-                  alt=""
-                />
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#DD502C" }}>
-                {row.event_name} <br />
-                <span style={{ color: "#8D8D8D" }}>
-                  {row.createdAt.slice(0, 10)}
-                </span>
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
-                {row.list_of_communities.length}
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                test@example.com
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                {row?.join_people?.totalMember}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {eventList.length === 0 ? (
+            <Box
+              sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
+            >
+              <CircularProgress color="success" />
+            </Box>
+          ) : (
+            <>
+              {eventList.map((row) => (
+                <StyledTableRow key={row._id}>
+                  <StyledTableCell component="th" scope="row">
+                    <img
+                      src={row.event_image}
+                      style={{ height: 30, width: 30 }}
+                      alt=""
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#DD502C" }}>
+                    {row.event_name} <br />
+                    <span style={{ color: "#8D8D8D" }}>
+                      {row.createdAt.slice(0, 10)}
+                    </span>
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
+                    {row.list_of_communities.length}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    test@example.com
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    {row?.join_people?.totalMember}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,13 +54,15 @@ const UserList = () => {
         setUserList(data.user);
       });
   }, [userInfo.user.token]);
-  const navigate = useNavigate()  
-  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const navigate = useNavigate();
+  const userInfobee = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfobee?.user])
+  }, [userInfobee?.user]);
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>
@@ -120,22 +123,36 @@ const UserList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {usersList.map((row) => (
-            <StyledTableRow key={row._id}>
-              <StyledTableCell component="th" scope="row">
-                <img src={row.pic} style={{ height: 30, width: 30 }} alt="" />
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#DD502C" }}>
-                {row.first_name} {row.last_name}
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                {row.email}
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                {row.phone}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {usersList.length === 0 ? (
+            <Box
+              sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
+            >
+              <CircularProgress color="success" />
+            </Box>
+          ) : (
+            <>
+              {usersList.map((row) => (
+                <StyledTableRow key={row._id}>
+                  <StyledTableCell component="th" scope="row">
+                    <img
+                      src={row.pic}
+                      style={{ height: 30, width: 30 }}
+                      alt=""
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#DD502C" }}>
+                    {row.first_name} {row.last_name}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    {row.email}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    {row.phone}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

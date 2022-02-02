@@ -5,14 +5,17 @@ import UserList from "./componnent/Dashboard/UserList/UserList";
 import Community from "./componnent/Dashboard/Community/Community";
 import Event from "./componnent/Dashboard/Event/Event";
 import CommunityList from "./componnent/Dashboard/CommunityList/CommunityList";
-import Home from "./componnent/Home/Home";
+import MobileNumber from "./componnent/MobileNumber/MobileNumber";
+import Otp from "./componnent/Otp/Otp";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />}></Route>
+          <Route path="/" element={<Login />} />
+          <Route path="/mobilenumber" element={<MobileNumber />} />
+          <Route path="/otp" element={<Otp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="/dashboard/userlist" element={<UserList />} />

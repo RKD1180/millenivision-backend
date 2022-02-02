@@ -13,6 +13,7 @@ import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import PopupState, { bindToggle, bindPopper } from "material-ui-popup-state";
 import Fade from "@mui/material/Fade";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import Popper from "@mui/material/Popper";
 
@@ -24,6 +25,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddLeader from "../AddLeader/AddLeader";
 import { useNavigate } from "react-router-dom";
+import { Alert } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,6 +55,7 @@ const Community = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [success, setSuccess] = useState(false);
 
   const [leaderList, setLeaderList] = useState([]);
 
@@ -73,13 +76,30 @@ const Community = () => {
         setLeaderList(data.user);
       });
   }, [userInfo.user.token]);
-  const navigate = useNavigate()  
-  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const navigate = useNavigate();
+  const userInfobee = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfobee?.user])
+  }, [userInfobee?.user]);
+
+  const handleRemove = (e) => {
+    fetch(`https://safe-journey-75946.herokuapp.com/users/removeAdmin/${e}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSuccess(true);
+      });
+  };
+
   return (
     <Box>
       <Box>
@@ -99,6 +119,11 @@ const Community = () => {
           {plus} <span style={{ marginLeft: 10 }}>Add Leader</span>
         </Button>
         <AddLeader open={open} handleClose={handleClose}></AddLeader>
+        {success && (
+          <Alert severity="success" sx={{ mb: 4 }}>
+            Community Leader Remove Successfully
+          </Alert>
+        )}
       </Box>
       <TableContainer component={Paper}>
         <Box sx={{ backgroundcolor: "#F5F4F4" }}>
@@ -159,53 +184,72 @@ const Community = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {leaderList?.map((row) => (
-              <StyledTableRow key={row._id}>
-                <StyledTableCell component="th" scope="row">
-                  <img src={row.pic} style={{ height: 30, width: 30 }} alt="" />
-                </StyledTableCell>
-                <StyledTableCell sx={{ color: "#DD502C" }}>
-                  {row.first_name} {row.last_name}
-                </StyledTableCell>
-                <StyledTableCell sx={{ color: "#565555" }}>
-                  {row.email}
-                </StyledTableCell>
-                <StyledTableCell sx={{ color: "#565555" }}>
-                  {row.phone}
-                </StyledTableCell>
-                <StyledTableCell>
-                  <PopupState variant="popper" popupId="demo-popup-popper">
-                    {(popupState) => (
-                      <div>
-                        <Button
-                          sx={{ color: "#33594A" }}
-                          {...bindToggle(popupState)}
-                        >
-                          {element}
-                        </Button>
-                        <Popper {...bindPopper(popupState)} transition>
-                          {({ TransitionProps }) => (
-                            <Fade {...TransitionProps} timeout={350}>
-                              <Paper sx={{ mr: 10 }}>
-                                <Button
-                                  sx={{
-                                    color: "#DD502C",
-                                    textTransform: "capitalize",
-                                  }}
-                                >
-                                  {trash}{" "}
-                                  <span style={{ marginLeft: 10 }}>Remove</span>
-                                </Button>
-                              </Paper>
-                            </Fade>
-                          )}
-                        </Popper>
-                      </div>
-                    )}
-                  </PopupState>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {leaderList.length === 0 ? (
+              <Box
+                sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
+              >
+                <CircularProgress color="success" />
+              </Box>
+            ) : (
+              <>
+                {leaderList?.map((row) => (
+                  <StyledTableRow key={row._id}>
+                    <StyledTableCell component="th" scope="row">
+                      <img
+                        src={row.pic}
+                        style={{ height: 30, width: 30 }}
+                        alt=""
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ color: "#DD502C" }}>
+                      {row.first_name} {row.last_name}
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ color: "#565555" }}>
+                      {row.email}
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ color: "#565555" }}>
+                      {row.phone}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <PopupState variant="popper" popupId="demo-popup-popper">
+                        {(popupState) => (
+                          <div>
+                            <Button
+                              sx={{ color: "#33594A" }}
+                              {...bindToggle(popupState)}
+                            >
+                              {element}
+                            </Button>
+                            <Popper {...bindPopper(popupState)} transition>
+                              {({ TransitionProps }) => (
+                                <Fade {...TransitionProps} timeout={350}>
+                                  <Paper sx={{ mr: 10 }}>
+                                    <Button
+                                      sx={{
+                                        color: "#DD502C",
+                                        textTransform: "capitalize",
+                                      }}
+                                    >
+                                      {trash}
+                                      <span
+                                        style={{ marginLeft: 10 }}
+                                        onClick={() => handleRemove(row.email)}
+                                      >
+                                        Remove
+                                      </span>
+                                    </Button>
+                                  </Paper>
+                                </Fade>
+                              )}
+                            </Popper>
+                          </div>
+                        )}
+                      </PopupState>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

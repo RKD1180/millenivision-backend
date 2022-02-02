@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,13 +55,15 @@ const CommunityList = () => {
         setEventList(data.communityEvent);
       });
   }, [userInfo.user.token]);
-  const navigate = useNavigate()  
-  const userInfobee = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const navigate = useNavigate();
+  const userInfobee = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     if (!userInfobee?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfobee?.user])
+  }, [userInfobee?.user]);
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>
@@ -124,32 +127,42 @@ const CommunityList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventList?.map((row) => (
-            <StyledTableRow key={row._id}>
-              <StyledTableCell component="th" scope="row">
-                <img
-                  src={row.event_image}
-                  style={{ height: 30, width: 30 }}
-                  alt=""
-                />
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#DD502C" }}>
-                {row.event_name} <br />
-                <span style={{ color: "#8D8D8D" }}>
-                  {row.createdAt.slice(0, 10)}
-                </span>
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
-                {row.list_of_communities.length}
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                test@example.com
-              </StyledTableCell>
-              <StyledTableCell sx={{ color: "#565555" }}>
-                {row?.join_people?.totalMember}
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
+          {eventList.length === 0 ? (
+            <Box
+              sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
+            >
+              <CircularProgress color="success" />
+            </Box>
+          ) : (
+            <>
+              {eventList?.map((row) => (
+                <StyledTableRow key={row._id}>
+                  <StyledTableCell component="th" scope="row">
+                    <img
+                      src={row.event_image}
+                      style={{ height: 30, width: 30 }}
+                      alt=""
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#DD502C" }}>
+                    {row.event_name} <br />
+                    <span style={{ color: "#8D8D8D" }}>
+                      {row.createdAt.slice(0, 10)}
+                    </span>
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
+                    {row.list_of_communities.length}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    test@example.com
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ color: "#565555" }}>
+                    {row?.join_people?.totalMember}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
