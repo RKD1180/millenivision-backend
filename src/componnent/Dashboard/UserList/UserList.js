@@ -41,6 +41,7 @@ const UserList = () => {
   const [usersList, setUserList] = useState([]);
   const [inputUser, setInputUser] = useState("");
   const [totalUser, setTotalUser] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   // const [searchUser, setSearchUser] = useState([]);
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
@@ -49,6 +50,7 @@ const UserList = () => {
   const limit = 10;
   const [page, setPage] = useState(1)
   useEffect(() => {
+    setIsLoading(true)
     let seraching = inputUser || ''
     fetch(`https://millenivision.herokuapp.com/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
@@ -65,7 +67,8 @@ const UserList = () => {
           setUserList(data.user)
         }
       });
-  }, [inputUser, page, userInfo?.user?.token]);
+      setIsLoading(false);
+  }, [isLoading,inputUser, page, userInfo?.user?.token]);
 
   // useEffect(() => {
   //   setIsLoading(true);

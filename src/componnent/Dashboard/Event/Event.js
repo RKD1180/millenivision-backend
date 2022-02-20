@@ -35,7 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Event = () => {
-  const [setIsLoading] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
   const [page, setPage] = useState(1)
@@ -64,7 +64,7 @@ const Event = () => {
         }
       });
     setIsLoading(false);
-  }, [inputUser, page, setIsLoading, userInfo.user.token]);
+  }, [isLoading,inputUser, page, setIsLoading, userInfo.user.token]);
   const navigate = useNavigate();
   const userInfobee = localStorage?.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
