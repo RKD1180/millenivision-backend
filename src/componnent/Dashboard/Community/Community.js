@@ -61,67 +61,89 @@ const Community = () => {
   const [success, setSuccess] = useState(false);
 
   const [inputUser, setInputUser] = useState("");
+  const [totalUser, setTotalUser] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchUser, setSearchUser] = useState([]);
-
   const [leaderList, setLeaderList] = useState([]);
 
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 10;
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/users/administrators`, {
+    let seraching = inputUser || ''
+    fetch(`http://localhost:5000/users/adminList?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`, //requerd
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        setSearchUser(data.user);
+        if (data?.user) {
+          setPageCount(Math.ceil(data?.count / limit));
+          setTotalUser(data.totalUser)
+          setLeaderList(data.user)
+        }
       });
     setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    setIsLoading(true);
-    if (searchUser?.length) {
-      const searchFilter = searchUser.filter((s) =>
-        s.first_name.toLowerCase().includes(inputUser.toLowerCase())
-      );
-      setLeaderList(searchFilter);
-      // console.log(searchFilter)
-      setIsLoading(false);
-    }
-  }, [inputUser]);
-  useEffect(() => {
-    setIsLoading(true);
-    if (searchUser?.length) {
-      const searchFilter2 = searchUser.filter((s) =>
-        s.last_name.toLowerCase().includes(inputUser.toLowerCase())
-      );
-      setLeaderList(searchFilter2);
-      // console.log(searchFilter)
-      setIsLoading(false);
-    }
-  }, [inputUser]);
+  }, [isLoading, inputUser, page]);
 
-  useEffect(() => {
-    fetch(`https://safe-journey-75946.herokuapp.com/users/administrators`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo?.user?.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLeaderList(data.user);
-      });
-  }, [userInfo?.user?.token]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetch(`https://safe-journey-75946.herokuapp.com/users/administrators`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: `Bearer ${userInfo.user.token}`, //requerd
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setSearchUser(data.user);
+  //     });
+  //   setIsLoading(false);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isLoading]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (searchUser?.length) {
+  //     const searchFilter = searchUser.filter((s) =>
+  //       s.first_name.toLowerCase().includes(inputUser.toLowerCase())
+  //     );
+  //     setLeaderList(searchFilter);
+  //     // console.log(searchFilter)
+  //     setIsLoading(false);
+  //   }
+  // }, [inputUser]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (searchUser?.length) {
+  //     const searchFilter2 = searchUser.filter((s) =>
+  //       s.last_name.toLowerCase().includes(inputUser.toLowerCase())
+  //     );
+  //     setLeaderList(searchFilter2);
+  //     // console.log(searchFilter)
+  //     setIsLoading(false);
+  //   }
+  // }, [inputUser]);
+
+  // useEffect(() => {
+  //   fetch(`https://safe-journey-75946.herokuapp.com/users/administrators`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: `Bearer ${userInfo?.user?.token}`,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setLeaderList(data.user);
+  //     });
+  // }, [userInfo?.user?.token]);
 
   const navigate = useNavigate();
   const userInfobee = localStorage?.getItem("userInfo")
@@ -238,7 +260,7 @@ const Community = () => {
               }}
               color="error"
             >
-              Total {leaderList?.length} Leader
+              Total {totalUser} Leader
             </Button>
           </Box>
         </Box>
@@ -336,6 +358,16 @@ const Community = () => {
             )}
           </TableBody>
         </Table>
+        <div className="pagination">
+          {/* {console.log(pageCount)} */}
+          {
+            [...Array(pageCount).keys()].map((number => <button key={number + 1}
+              className={number + 1 === page ? 'activeSelect' : ''}
+              onClick={() => setPage(number + 1)}
+            >{number + 1}
+            </button>))
+          }
+        </div>
       </TableContainer>
     </Box>
   );

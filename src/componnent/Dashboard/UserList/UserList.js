@@ -15,7 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-
+import './UserList.css'
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundcolor: "#F5F4F4",
@@ -40,79 +40,88 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const UserList = () => {
   const [usersList, setUserList] = useState([]);
   const [inputUser, setInputUser] = useState("");
+  const [totalUser, setTotalUser] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [searchUser, setSearchUser] = useState([]);
+  // const [searchUser, setSearchUser] = useState([]);
 
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (searchUser?.length) {
-      const searchFilter1 = searchUser.filter((s) =>
-        s.first_name.toLowerCase().includes(inputUser.toLowerCase())
-      );
-      setUserList(searchFilter1);
-      // console.log(searchFilter)
-      setIsLoading(false);
-    }
-  }, [inputUser, searchUser]);
+  // const userInfo = window.localStorage.getItem("userInfo")
+  //   ? JSON.parse(window.localStorage.getItem("userInfo"))
+  //   : null;
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 10;
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     setIsLoading(true);
-    if (searchUser?.length) {
-      const searchFilter2 = searchUser.filter((s) =>
-        s.last_name.toLowerCase().includes(inputUser.toLowerCase())
-      );
-      setUserList(searchFilter2);
-      // console.log(searchFilter)
-      setIsLoading(false);
-    }
-  }, [inputUser, searchUser]);
-  useEffect(() => {
-    setIsLoading(true);
-    if (searchUser?.length) {
-      const searchFilter3 = searchUser.filter((s) =>
-        s.phone.toLowerCase().includes(inputUser.toLowerCase())
-      );
-      setUserList(searchFilter3);
-      // console.log(searchFilter)
-      setIsLoading(false);
-    }
-  }, [inputUser, searchUser]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`, //requerd
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchUser(data.user);
-      });
+    let seraching = inputUser || ''
+      fetch(`http://localhost:5000/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.user) {
+            setPageCount(Math.ceil(data?.count / limit));
+            setTotalUser(data.totalUser)
+            setUserList(data.user)
+          }
+        });
     setIsLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLoading, inputUser, page]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setUserList(data.user));
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (searchUser?.length) {
+  //     const searchFilter1 = searchUser.filter((s) =>
+  //       s.first_name.toLowerCase().includes(inputUser.toLowerCase())
+  //     );
+  //     setUserList(searchFilter1);
+  //     // console.log(searchFilter)
+  //     setIsLoading(false);
+  //   }
+  // }, [inputUser, searchUser]);
 
-    setIsLoading(false);
-  }, [userInfo?.user?.token, isLoading]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (searchUser?.length) {
+  //     const searchFilter2 = searchUser.filter((s) =>
+  //       s.last_name.toLowerCase().includes(inputUser.toLowerCase())
+  //     );
+  //     setUserList(searchFilter2);
+  //     // console.log(searchFilter)
+  //     setIsLoading(false);
+  //   }
+  // }, [inputUser, searchUser]);
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   if (searchUser?.length) {
+  //     const searchFilter3 = searchUser.filter((s) =>
+  //       s.phone.toLowerCase().includes(inputUser.toLowerCase())
+  //     );
+  //     setUserList(searchFilter3);
+  //     // console.log(searchFilter)
+  //     setIsLoading(false);
+  //   }
+  // }, [inputUser, searchUser]);
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       authorization: `Bearer ${userInfo.user.token}`, //requerd
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setSearchUser(data.user);
+  //     });
+  //   setIsLoading(false);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const navigate = useNavigate();
   const userInfobee = localStorage?.getItem("userInfo")
@@ -171,7 +180,6 @@ const UserList = () => {
             />
           </Paper>
         </Box>
-
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -190,7 +198,7 @@ const UserList = () => {
             }}
             color="error"
           >
-            Total {usersList.length} User
+            Total {totalUser && totalUser} User
           </Button>
         </Box>
       </Box>
@@ -252,6 +260,16 @@ const UserList = () => {
           )}
         </TableBody>
       </Table>
+      <div className="pagination">
+        {/* {console.log(pageCount)} */}
+        {
+          [...Array(pageCount).keys()].map((number => <button key={number + 1}
+            className={number + 1 === page ? 'activeSelect' : ''}
+            onClick={() => setPage(number + 1)}
+          >{number + 1}
+          </button>))
+        }
+      </div>
     </TableContainer>
   );
 };

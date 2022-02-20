@@ -1,0 +1,13 @@
+.pagination {
+  margin: 25px;
+}
+.pagination button {
+  padding: 6px 12px !important;
+  margin-right: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.pagination .activeSelect {
+  background: blueviolet;
+  color: white;
+}
