@@ -75,7 +75,7 @@ const Community = () => {
   useEffect(() => {
     setIsLoading(true);
     let seraching = inputUser || ''
-    fetch(`http://localhost:5000/users/adminList?search=${seraching}&&page=${page}&&limit=${limit}`, {
+    fetch(`https://millenivision.herokuapp.com/users/adminList?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
