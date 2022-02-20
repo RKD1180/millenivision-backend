@@ -40,7 +40,8 @@ const CommunityList = () => {
   const limit = 10;
   const [page, setPage] = useState(1)
   const [eventList, setEventList] = useState([]);
-  const [inputUser, setInputUser] = useState("");
+  const [inputUser] = useState("");//setInputUser
+  
   const [totalEvents, setTotalEvents] = useState("");
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
