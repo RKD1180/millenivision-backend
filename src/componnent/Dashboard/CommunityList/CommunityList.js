@@ -41,7 +41,7 @@ const CommunityList = () => {
   const [page, setPage] = useState(1)
   const [eventList, setEventList] = useState([]);
   const [inputUser, setInputUser] = useState("");
-  const [totalUser, setTotalUser] = useState("");
+  const [totalEvents, setTotalEvents] = useState("");
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
@@ -59,7 +59,7 @@ const CommunityList = () => {
       .then((data) => {
         if (data?.communityEvent) {
           setPageCount(Math.ceil(data?.count / limit));
-          setTotalUser(data.totalEvents)
+          setTotalEvents(data.totalEvents)
           setEventList(data.communityEvent);
         }
       });
@@ -108,7 +108,7 @@ const CommunityList = () => {
             }}
             color="error"
           >
-            Total {eventList?.length} Event
+            Total {totalEvents} Event
           </Button>
         </Box>
       </Box>
@@ -160,13 +160,13 @@ const CommunityList = () => {
                     </span>
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
-                    {row.list_of_communities.length}
+                    {row?.list_of_communities?.length}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
-                    test@example.com
+                    {row?.user?.email}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
-                    {row?.join_people?.totalMember}
+                    {row?.join_people?.length}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
