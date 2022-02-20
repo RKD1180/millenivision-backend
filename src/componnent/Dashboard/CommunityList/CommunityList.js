@@ -36,14 +36,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CommunityList = () => {
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 10;
+  const [page, setPage] = useState(1)
   const [eventList, setEventList] = useState([]);
-
+  const [inputUser, setInputUser] = useState("");
+  const [totalUser, setTotalUser] = useState("");
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
 
   useEffect(() => {
-    fetch(`https://safe-journey-75946.herokuapp.com/api/community-events/`, {
+    let seraching = inputUser || ''
+    fetch(`https://millenivision.herokuapp.com/api/community-events/allEvents?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +57,11 @@ const CommunityList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setEventList(data.communityEvent);
+        if (data?.communityEvent) {
+          setPageCount(Math.ceil(data?.count / limit));
+          setTotalUser(data.totalEvents)
+          setEventList(data.communityEvent);
+        }
       });
   }, [userInfo.user.token]);
   const navigate = useNavigate();
@@ -165,6 +174,16 @@ const CommunityList = () => {
           )}
         </TableBody>
       </Table>
+      <div className="pagination">
+        {/* {console.log(pageCount)} */}
+        {
+          [...Array(pageCount).keys()].map((number => <button key={number + 1}
+            className={number + 1 === page ? 'activeSelect' : ''}
+            onClick={() => setPage(number + 1)}
+          >{number + 1}
+          </button>))
+        }
+      </div>
     </TableContainer>
   );
 };
