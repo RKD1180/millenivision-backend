@@ -137,7 +137,7 @@ const CommunityList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventList.length === 0 ? (
+          {eventList?.length === 0 ? (
             <Box
               sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
             >
@@ -167,7 +167,7 @@ const CommunityList = () => {
                     {row?.user?.email}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
-                    {row?.join_people?.length}
+                    {row?.join_people?.totalMember}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}

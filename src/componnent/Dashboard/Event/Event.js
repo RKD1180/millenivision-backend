@@ -48,7 +48,7 @@ const Event = () => {
   useEffect(() => {
     setIsLoading(true)
     let seraching = inputUser || ''
-    fetch(`https://millenivision.herokuapp.com/api/events/allEvents?search=${seraching}&&page=${page}&&limit=${limit}`, {
+    fetch(`https://millenivision.herokuapp.com/api/events/getEvents?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const Event = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data?.communityEvent) {
+        if (data?.events) {
           setPageCount(Math.ceil(data?.count / limit));
           setTotalEvents(data.totalEvents)
           setEventList(data.events);
