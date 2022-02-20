@@ -53,7 +53,7 @@ const CommunityList = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`, //requerd
+        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
       },
     })
       .then((res) => res.json())

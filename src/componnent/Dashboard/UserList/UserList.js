@@ -50,26 +50,29 @@ const UserList = () => {
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
   const [page, setPage] = useState(1)
-
+  const userInfo = localStorage?.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null;
   useEffect(() => {
     setIsLoading(true);
     let seraching = inputUser || ''
-      fetch(`https://millenivision.herokuapp.com/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.user) {
-            setPageCount(Math.ceil(data?.count / limit));
-            setTotalUser(data.totalUser)
-            setUserList(data.user)
-          }
-        });
+    fetch(`https://millenivision.herokuapp.com/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.user) {
+          setPageCount(Math.ceil(data?.count / limit));
+          setTotalUser(data.totalUser)
+          setUserList(data.user)
+        }
+      });
     setIsLoading(false);
-  }, [isLoading, inputUser, page]);
+  }, [isLoading, inputUser, page, userInfo?.user?.token]);
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -124,14 +127,12 @@ const UserList = () => {
   // }, []);
 
   const navigate = useNavigate();
-  const userInfobee = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
+
   useEffect(() => {
-    if (!userInfobee?.user) {
+    if (!userInfo?.user) {
       navigate("/login");
     }
-  }, [navigate, userInfobee?.user]);
+  }, [navigate, userInfo?.user]);
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>

@@ -35,28 +35,36 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Event = () => {
+  const [setIsLoading] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
+  const limit = 10;
+  const [page, setPage] = useState(1)
   const [eventList, setEventList] = useState([]);
-  const [isloading, setIsLoading] = useState(false);
-
-  const userInfo = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
+  const [inputUser] = useState("");//setInputUser
+  const [totalEvents, setTotalEvents] = useState("");
+  const userInfo = window.localStorage.getItem("userInfo")
+    ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/api/events/`, {
+    setIsLoading(true)
+    let seraching = inputUser || ''
+    fetch(`https://millenivision.herokuapp.com/api/events/allEvents?search=${seraching}&&page=${page}&&limit=${limit}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo.user.token}`,
+        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        setEventList(data.event);
+        if (data?.communityEvent) {
+          setPageCount(Math.ceil(data?.count / limit));
+          setTotalEvents(data.totalEvents)
+          setEventList(data.events);
+        }
       });
     setIsLoading(false);
-  }, [userInfo?.user?.token, isloading]);
-
+  }, [inputUser, page, setIsLoading, userInfo.user.token]);
   const navigate = useNavigate();
   const userInfobee = localStorage?.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
@@ -102,7 +110,7 @@ const Event = () => {
             }}
             color="error"
           >
-            Total {eventList.length} Event
+            Total {totalEvents && totalEvents} Event
           </Button>
         </Box>
       </Box>
@@ -130,7 +138,7 @@ const Event = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {eventList.length === 0 ? (
+          {eventList?.length === 0 ? (
             <Box
               sx={{ display: "flex", justifyContent: "center", ml: 50, p: 2 }}
             >
@@ -154,13 +162,13 @@ const Event = () => {
                     </span>
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555", pl: 4 }}>
-                    {row.list_of_communities.length}
+                    {row.list_of_communities?.length}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
-                    test@example.com
+                    {row?.user?.email}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
-                    {row?.join_people?.totalMember}
+                    {row?.join_people?.length}
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -168,6 +176,16 @@ const Event = () => {
           )}
         </TableBody>
       </Table>
+      <div className="pagination">
+        {/* {console.log(pageCount)} */}
+        {
+          [...Array(pageCount).keys()].map((number => <button key={number + 1}
+            className={number + 1 === page ? 'activeSelect' : ''}
+            onClick={() => setPage(number + 1)}
+          >{number + 1}
+          </button>))
+        }
+      </div>
     </TableContainer>
   );
 };
