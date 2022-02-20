@@ -12,6 +12,9 @@ import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import SearchIcon from "@mui/icons-material/Search";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,12 +39,68 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const UserList = () => {
   const [usersList, setUserList] = useState([]);
+  const [inputUser, setInputUser] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchUser, setSearchUser] = useState([]);
 
   const userInfo = window.localStorage.getItem("userInfo")
     ? JSON.parse(window.localStorage.getItem("userInfo"))
     : null;
 
   useEffect(() => {
+    setIsLoading(true);
+    if (searchUser?.length) {
+      const searchFilter1 = searchUser.filter((s) =>
+        s.first_name.toLowerCase().includes(inputUser.toLowerCase())
+      );
+      setUserList(searchFilter1);
+      // console.log(searchFilter)
+      setIsLoading(false);
+    }
+  }, [inputUser, searchUser]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (searchUser?.length) {
+      const searchFilter2 = searchUser.filter((s) =>
+        s.last_name.toLowerCase().includes(inputUser.toLowerCase())
+      );
+      setUserList(searchFilter2);
+      // console.log(searchFilter)
+      setIsLoading(false);
+    }
+  }, [inputUser, searchUser]);
+  useEffect(() => {
+    setIsLoading(true);
+    if (searchUser?.length) {
+      const searchFilter3 = searchUser.filter((s) =>
+        s.phone.toLowerCase().includes(inputUser.toLowerCase())
+      );
+      setUserList(searchFilter3);
+      // console.log(searchFilter)
+      setIsLoading(false);
+    }
+  }, [inputUser, searchUser]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${userInfo.user.token}`, //requerd
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setSearchUser(data.user);
+      });
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
       method: "GET",
       headers: {
@@ -50,10 +109,11 @@ const UserList = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setUserList(data.user);
-      });
-  }, [userInfo.user.token]);
+      .then((data) => setUserList(data.user));
+
+    setIsLoading(false);
+  }, [userInfo?.user?.token, isLoading]);
+
   const navigate = useNavigate();
   const userInfobee = localStorage?.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
@@ -62,7 +122,7 @@ const UserList = () => {
     if (!userInfobee?.user) {
       navigate("/login");
     }
-  }, [userInfobee?.user]);
+  }, [navigate, userInfobee?.user]);
   return (
     <TableContainer component={Paper}>
       <Box sx={{ backgroundcolor: "#F5F4F4" }}>
@@ -80,11 +140,43 @@ const UserList = () => {
             User List
           </Typography>
         </Box>
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            justifyContent: "flex-end",
+            width: 500,
+            mt: -6,
+            ml: 15,
+          }}
+        >
+          <Paper
+            elevation={3}
+            component="form"
+            sx={{
+              p: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+              width: 400,
+              mt: 2,
+            }}
+          >
+            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search google maps" }}
+              onChange={(e) => setInputUser(e.target.value)}
+            />
+          </Paper>
+        </Box>
 
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
             justifyContent: "flex-end",
+            mt: -2,
           }}
         >
           <Button
@@ -109,16 +201,25 @@ const UserList = () => {
         <TableHead>
           <TableRow>
             <StyledTableCell style={{ color: "#33594A" }}>
-              User Profile
+              First Name
             </StyledTableCell>
             <StyledTableCell style={{ color: "#33594A" }}>
-              User Name
+              Last Name
             </StyledTableCell>
             <StyledTableCell style={{ color: "#33594A", paddingLeft: 69 }}>
               Email
             </StyledTableCell>
             <StyledTableCell style={{ color: "#33594A", paddingLeft: 31 }}>
               Phone
+            </StyledTableCell>
+            <StyledTableCell style={{ color: "#33594A", paddingLeft: 31 }}>
+              Location
+            </StyledTableCell>
+            <StyledTableCell style={{ color: "#33594A", paddingLeft: 31 }}>
+              Gender
+            </StyledTableCell>
+            <StyledTableCell style={{ color: "#33594A", paddingLeft: 31 }}>
+              Industry
             </StyledTableCell>
           </TableRow>
         </TableHead>
@@ -133,15 +234,11 @@ const UserList = () => {
             <>
               {usersList.map((row) => (
                 <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
-                    <img
-                      src={row.pic}
-                      style={{ height: 30, width: 30 }}
-                      alt=""
-                    />
+                  <StyledTableCell sx={{ color: "#DD502C" }}>
+                    {row.first_name}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#DD502C" }}>
-                    {row.first_name} {row.last_name}
+                    {row.last_name}
                   </StyledTableCell>
                   <StyledTableCell sx={{ color: "#565555" }}>
                     {row.email}
