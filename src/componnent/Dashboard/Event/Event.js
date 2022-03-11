@@ -12,6 +12,7 @@ import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { getLocalStorage } from "../../../hooks/useStorage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,9 +43,7 @@ const Event = () => {
   const [eventList, setEventList] = useState([]);
   const [inputUser] = useState("");//setInputUser
   const [totalEvents, setTotalEvents] = useState("");
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
+  const userInfo =getLocalStorage("userInfo");
   useEffect(() => {
     setIsLoading(true)
     let seraching = inputUser || ''
@@ -66,9 +65,7 @@ const Event = () => {
     setIsLoading(false);
   }, [isLoading,inputUser, page, setIsLoading, userInfo.user.token]);
   const navigate = useNavigate();
-  const userInfobee = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
+  const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {
     if (!userInfobee?.user) {
       navigate("/login");

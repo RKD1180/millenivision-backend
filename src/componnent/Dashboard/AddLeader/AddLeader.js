@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getLocalStorage } from "../../../hooks/useStorage";
 
 // const style = {
 //   position: "absolute",
@@ -32,10 +33,7 @@ const AddLeader = ({ open, handleClose }) => {
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
-
+  const userInfo = getLocalStorage("userInfo");
   useEffect(() => {
     setIsLoading(true);
     fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
@@ -95,9 +93,7 @@ const AddLeader = ({ open, handleClose }) => {
     }
   }, [inputUser]);
   const navigate = useNavigate();
-  const userInfobee = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
+  const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {
     if (!userInfobee?.user) {
       navigate("/login");

@@ -16,6 +16,7 @@ import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import './UserList.css'
+import { getLocalStorage } from "../../../hooks/useStorage";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundcolor: "#F5F4F4",
@@ -43,9 +44,7 @@ const UserList = () => {
   const [totalUser, setTotalUser] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   // const [searchUser, setSearchUser] = useState([]);
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
+  const userInfo = getLocalStorage("userInfo");
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
   const [page, setPage] = useState(1)

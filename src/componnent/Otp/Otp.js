@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
+import { getLocalStorage } from "../../hooks/useStorage";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -17,10 +18,7 @@ const Otp = () => {
   const [message, setMessage] = useState(false);
 
   const handleSubmit = () => {
-    const userInfo = localStorage?.getItem("userInfo")
-      ? JSON.parse(localStorage.getItem("userInfo"))
-      : null;
-
+    const userInfo = getLocalStorage("userInfo");
     fetch("https://safe-journey-75946.herokuapp.com/admin-otp-verify", {
       method: "POST",
       headers: {

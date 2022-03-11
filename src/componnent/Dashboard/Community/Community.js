@@ -29,6 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddLeader from "../AddLeader/AddLeader";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
+import { getLocalStorage } from "../../../hooks/useStorage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -65,9 +66,7 @@ const Community = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [leaderList, setLeaderList] = useState([]);
 
-  const userInfo = window.localStorage.getItem("userInfo")
-    ? JSON.parse(window.localStorage.getItem("userInfo"))
-    : null;
+  const userInfo = getLocalStorage("userInfo");
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
   const [page, setPage] = useState(1)
@@ -147,9 +146,7 @@ const Community = () => {
   // }, [userInfo?.user?.token]);
 
   const navigate = useNavigate();
-  const userInfobee = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
+  const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {
     if (!userInfobee?.user) {
       navigate("/login");

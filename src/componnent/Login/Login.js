@@ -2,14 +2,15 @@
 import { Alert, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import { green } from "@mui/material/colors";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getLocalStorage, setLocalStorageWithExpiry } from "../../hooks/useStorage";
 import logo from "../../img/logo.png";
 
-import CircularProgress from "@mui/material/CircularProgress";
-import { green } from "@mui/material/colors";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -72,8 +73,9 @@ const Login = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.user?.isAdmin === true) {
-            localStorage?.setItem("userInfo", JSON.stringify(data));
-
+            // localStorage?.setItem("userInfo", JSON.stringify(data));
+            setLocalStorageWithExpiry("userInfo",data,30)
+            // console.log(data)
             fetch("https://safe-journey-75946.herokuapp.com/admin-otp-send", {
               method: "POST",
               headers: {
@@ -91,9 +93,7 @@ const Login = () => {
         });
     }
   };
-  const userInfo = localStorage?.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null;
+  const userInfo = getLocalStorage("userInfo");
   // console.log(userInfo)
   useEffect(() => {
     if (userInfo?.user) {

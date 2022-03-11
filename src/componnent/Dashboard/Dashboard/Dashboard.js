@@ -104,7 +104,7 @@ function Dashboard(props) {
     setMobileOpen(!mobileOpen);
   };
   const navigate = useNavigate()  
-  const userInfo = localStorage?.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
+  const userInfo =getLocalStorage("userInfo");
   useEffect(() => {
     if (!userInfo?.user) {
       navigate('/login')
