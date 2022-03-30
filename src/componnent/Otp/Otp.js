@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
-import { getLocalStorage } from "../../hooks/useStorage";
+import { getLocalStorage } from "../../Hooks/useStorage";
 
 const ariaLabel = { "aria-label": "description" };
 

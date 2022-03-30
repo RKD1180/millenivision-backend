@@ -29,7 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddLeader from "../AddLeader/AddLeader";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "@mui/material";
-import { getLocalStorage } from "../../../hooks/useStorage";
+import { getLocalStorage } from "../../../Hooks/useStorage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -69,24 +69,27 @@ const Community = () => {
   const userInfo = getLocalStorage("userInfo");
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setIsLoading(true);
-    let seraching = inputUser || ''
-    fetch(`https://millenivision.herokuapp.com/users/adminList?search=${seraching}&&page=${page}&&limit=${limit}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
-      },
-    })
+    let seraching = inputUser || "";
+    fetch(
+      `https://millenivision.herokuapp.com/users/adminList?search=${seraching}&&page=${page}&&limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo?.user?.token}`, //requerd
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.user) {
           setPageCount(Math.ceil(data?.count / limit));
-          setTotalUser(data.totalUser)
-          setLeaderList(data.user)
+          setTotalUser(data.totalUser);
+          setLeaderList(data.user);
         }
       });
     setIsLoading(false);
@@ -358,13 +361,15 @@ const Community = () => {
         </Table>
         <div className="pagination">
           {/* {console.log(pageCount)} */}
-          {
-            [...Array(pageCount).keys()].map((number => <button key={number + 1}
-              className={number + 1 === page ? 'activeSelect' : ''}
+          {[...Array(pageCount).keys()].map((number) => (
+            <button
+              key={number + 1}
+              className={number + 1 === page ? "activeSelect" : ""}
               onClick={() => setPage(number + 1)}
-            >{number + 1}
-            </button>))
-          }
+            >
+              {number + 1}
+            </button>
+          ))}
         </div>
       </TableContainer>
     </Box>

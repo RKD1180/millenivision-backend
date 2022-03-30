@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getLocalStorage } from "../../../hooks/useStorage";
+import { getLocalStorage } from "../../../Hooks/useStorage";
 
 // const style = {
 //   position: "absolute",

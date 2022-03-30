@@ -15,8 +15,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import './UserList.css'
-import { getLocalStorage } from "../../../hooks/useStorage";
+import "./UserList.css";
+import { getLocalStorage } from "../../../Hooks/useStorage";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundcolor: "#F5F4F4",
@@ -47,27 +47,30 @@ const UserList = () => {
   const userInfo = getLocalStorage("userInfo");
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   useEffect(() => {
-    setIsLoading(true)
-    let seraching = inputUser || ''
-    fetch(`https://millenivision.herokuapp.com/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
-      },
-    })
+    setIsLoading(true);
+    let seraching = inputUser || "";
+    fetch(
+      `https://millenivision.herokuapp.com/users/userList?search=${seraching}&&page=${page}&&limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo?.user?.token}`, //requerd
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data?.user) {
           setPageCount(Math.ceil(data?.count / limit));
-          setTotalUser(data.totalUser)
-          setUserList(data.user)
+          setTotalUser(data.totalUser);
+          setUserList(data.user);
         }
       });
-      setIsLoading(false);
-  }, [isLoading,inputUser, page, userInfo?.user?.token]);
+    setIsLoading(false);
+  }, [isLoading, inputUser, page, userInfo?.user?.token]);
 
   // useEffect(() => {
   //   setIsLoading(true);
@@ -258,13 +261,15 @@ const UserList = () => {
       </Table>
       <div className="pagination">
         {/* {console.log(pageCount)} */}
-        {
-          [...Array(pageCount).keys()].map((number => <button key={number + 1}
-            className={number + 1 === page ? 'activeSelect' : ''}
+        {[...Array(pageCount).keys()].map((number) => (
+          <button
+            key={number + 1}
+            className={number + 1 === page ? "activeSelect" : ""}
             onClick={() => setPage(number + 1)}
-          >{number + 1}
-          </button>))
-        }
+          >
+            {number + 1}
+          </button>
+        ))}
       </div>
     </TableContainer>
   );

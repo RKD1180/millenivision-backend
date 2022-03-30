@@ -8,9 +8,11 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getLocalStorage, setLocalStorageWithExpiry } from "../../hooks/useStorage";
+import {
+  getLocalStorage,
+  setLocalStorageWithExpiry,
+} from "../../Hooks/useStorage";
 import logo from "../../img/logo.png";
-
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -74,7 +76,7 @@ const Login = () => {
         .then((data) => {
           if (data.user?.isAdmin === true) {
             // localStorage?.setItem("userInfo", JSON.stringify(data));
-            setLocalStorageWithExpiry("userInfo",data,30)
+            setLocalStorageWithExpiry("userInfo", data, 30);
             // console.log(data)
             fetch("https://safe-journey-75946.herokuapp.com/admin-otp-send", {
               method: "POST",

@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-import { getLocalStorage } from "../../../hooks/useStorage";
+import { getLocalStorage } from "../../../Hooks/useStorage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,34 +36,38 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Event = () => {
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const limit = 10;
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [eventList, setEventList] = useState([]);
-  const [inputUser] = useState("");//setInputUser
+  const [inputUser] = useState(""); //setInputUser
   const [totalEvents, setTotalEvents] = useState("");
-  const userInfo =getLocalStorage("userInfo");
+  const userInfo = getLocalStorage("userInfo");
   useEffect(() => {
-    setIsLoading(true)
-    let seraching = inputUser || ''
-    fetch(`https://millenivision.herokuapp.com/api/events/getEvents?search=${seraching}&&page=${page}&&limit=${limit}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${userInfo?.user?.token}`, //requerd
-      },
-    })
+    setIsLoading(true);
+    let seraching = inputUser || "";
+    fetch(
+      `https://millenivision.herokuapp.com/api/events?search=${seraching}&&page=${page}&&limit=${limit}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${userInfo?.user?.token}`, //requerd
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
-        if (data?.events) {
+        console.log(data);
+        if (data?.event) {
           setPageCount(Math.ceil(data?.count / limit));
-          setTotalEvents(data.totalEvents)
-          setEventList(data.events);
+          setTotalEvents(data?.totalEvent);
+          setEventList(data?.event);
         }
       });
     setIsLoading(false);
-  }, [isLoading,inputUser, page, setIsLoading, userInfo.user.token]);
+  }, [isLoading, inputUser, page, setIsLoading, userInfo?.user?.token]);
   const navigate = useNavigate();
   const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {
@@ -175,13 +179,15 @@ const Event = () => {
       </Table>
       <div className="pagination">
         {/* {console.log(pageCount)} */}
-        {
-          [...Array(pageCount).keys()].map((number => <button key={number + 1}
-            className={number + 1 === page ? 'activeSelect' : ''}
+        {[...Array(pageCount).keys()].map((number) => (
+          <button
+            key={number + 1}
+            className={number + 1 === page ? "activeSelect" : ""}
             onClick={() => setPage(number + 1)}
-          >{number + 1}
-          </button>))
-        }
+          >
+            {number + 1}
+          </button>
+        ))}
       </div>
     </TableContainer>
   );

@@ -26,14 +26,12 @@ import React, { useEffect } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../img/logo.png";
 import avatar from "../../../img/man.png";
-
-
-
+import { getLocalStorage } from "../../../Hooks/useStorage";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 320;
 
 function Dashboard(props) {
-
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [active, setActive] = React.useState(false);
@@ -99,17 +97,21 @@ function Dashboard(props) {
         break;
     }
   }, [currPath]);
+  const handleLogOut = () => {
+    console.log("click");
+    getLocalStorage("usserInfo");
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const navigate = useNavigate()  
-  const userInfo =getLocalStorage("userInfo");
+  const navigate = useNavigate();
+  const userInfo = getLocalStorage("userInfo");
   useEffect(() => {
     if (!userInfo?.user) {
-      navigate('/login')
+      navigate("/login");
     }
-  }, [userInfo?.user])
+  }, [userInfo?.user]);
   const drawer = (
     <div style={{ marginLeft: 7 }}>
       <Box sx={{ mt: 2, mb: 5 }}>
@@ -126,13 +128,13 @@ function Dashboard(props) {
             style={
               active
                 ? {
-                  backgroundColor: "#C4C4C4",
-                  width: "75%",
-                  borderRadius: 16,
-                  paddingLeft: 33,
-                  color: "#DD502C",
-                  transition: 0.2,
-                }
+                    backgroundColor: "#C4C4C4",
+                    width: "75%",
+                    borderRadius: 16,
+                    paddingLeft: 33,
+                    color: "#DD502C",
+                    transition: 0.2,
+                  }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -159,13 +161,13 @@ function Dashboard(props) {
             style={
               activeUser
                 ? {
-                  backgroundColor: "#C4C4C4",
-                  width: "75%",
-                  borderRadius: 16,
-                  paddingLeft: 33,
-                  color: "#DD502C",
-                  transition: 0.2,
-                }
+                    backgroundColor: "#C4C4C4",
+                    width: "75%",
+                    borderRadius: 16,
+                    paddingLeft: 33,
+                    color: "#DD502C",
+                    transition: 0.2,
+                  }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -195,13 +197,13 @@ function Dashboard(props) {
             style={
               activeCommunity
                 ? {
-                  backgroundColor: "#C4C4C4",
-                  width: "75%",
-                  borderRadius: 16,
-                  paddingLeft: 33,
-                  color: "#DD502C",
-                  transition: 0.2,
-                }
+                    backgroundColor: "#C4C4C4",
+                    width: "75%",
+                    borderRadius: 16,
+                    paddingLeft: 33,
+                    color: "#DD502C",
+                    transition: 0.2,
+                  }
                 : { paddingLeft: 33, color: "#33594A" }
             }
           >
@@ -231,13 +233,13 @@ function Dashboard(props) {
             style={
               activeEvent
                 ? {
-                  backgroundColor: "#C4C4C4",
-                  width: "75%",
-                  borderRadius: 16,
-                  paddingLeft: 33,
-                  color: "#DD502C",
-                  transition: 0.2,
-                }
+                    backgroundColor: "#C4C4C4",
+                    width: "75%",
+                    borderRadius: 16,
+                    paddingLeft: 33,
+                    color: "#DD502C",
+                    transition: 0.2,
+                  }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -268,13 +270,13 @@ function Dashboard(props) {
             style={
               activeCommunityList
                 ? {
-                  backgroundColor: "#C4C4C4",
-                  width: "75%",
-                  borderRadius: 16,
-                  paddingLeft: 33,
-                  color: "#DD502C",
-                  transition: 0.2,
-                }
+                    backgroundColor: "#C4C4C4",
+                    width: "75%",
+                    borderRadius: 16,
+                    paddingLeft: 33,
+                    color: "#DD502C",
+                    transition: 0.2,
+                  }
                 : { paddingLeft: 32, color: "#33594A" }
             }
           >
@@ -292,6 +294,24 @@ function Dashboard(props) {
             <ListItemText
               primaryTypographyProps={{ fontWeight: 600 }}
               primary="Community List"
+            />
+          </ListItem>
+        </Link>
+      </List>
+      <List>
+        <Link to="/login" style={{ textDecoration: "none", color: "#33594A" }}>
+          <ListItem
+            onClick={handleLogOut}
+            sx={{ pl: 3 }}
+            style={{ paddingLeft: 32, color: "#33594A" }}
+          >
+            <Box sx={{ mr: 2 }}>
+              <LogoutIcon color="success" />
+            </Box>
+
+            <ListItemText
+              primaryTypographyProps={{ fontWeight: 600 }}
+              primary="LogOut"
             />
           </ListItem>
         </Link>
