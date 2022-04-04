@@ -61,14 +61,13 @@ const CommunityList = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data?.communityEvent) {
-          setPageCount(Math.ceil(data?.count / limit));
-          setTotalEvents(data.totalEvents);
+          setPageCount(Math.ceil(data?.totalCommunityEvent / limit));
+          setTotalEvents(data.totalCommunityEvent);
           setEventList(data.communityEvent);
         }
       });
   }, [userInfo?.user?.user?.token]);
 
-  console.log(userInfo?.user.token);
   const navigate = useNavigate();
   const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {

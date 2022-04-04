@@ -98,8 +98,8 @@ function Dashboard(props) {
     }
   }, [currPath]);
   const handleLogOut = () => {
-    console.log("click");
-    getLocalStorage("usserInfo");
+    localStorage.removeItem("userInfo");
+    navigate("/login");
   };
 
   const handleDrawerToggle = () => {
@@ -299,22 +299,20 @@ function Dashboard(props) {
         </Link>
       </List>
       <List>
-        <Link to="/login" style={{ textDecoration: "none", color: "#33594A" }}>
-          <ListItem
-            onClick={handleLogOut}
-            sx={{ pl: 3 }}
-            style={{ paddingLeft: 32, color: "#33594A" }}
-          >
-            <Box sx={{ mr: 2 }}>
-              <LogoutIcon color="success" />
-            </Box>
+        <ListItem
+          onClick={handleLogOut}
+          sx={{ pl: 3 }}
+          style={{ paddingLeft: 32, color: "#33594A", cursor: "pointer" }}
+        >
+          <Box sx={{ mr: 2 }}>
+            <LogoutIcon color="success" />
+          </Box>
 
-            <ListItemText
-              primaryTypographyProps={{ fontWeight: 600 }}
-              primary="LogOut"
-            />
-          </ListItem>
-        </Link>
+          <ListItemText
+            primaryTypographyProps={{ fontWeight: 600 }}
+            primary="LogOut"
+          />
+        </ListItem>
       </List>
     </div>
   );
@@ -360,7 +358,12 @@ function Dashboard(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <Link
+        to="/dashboard/profile"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      </Link>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -385,11 +388,14 @@ function Dashboard(props) {
       <MenuItem>
         <IconButton size="large" aria-label="show 17 new notifications">
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <Link to="/dashboard/notification">
+              <NotificationsIcon />
+            </Link>
           </Badge>
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -436,7 +442,9 @@ function Dashboard(props) {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" aria-label="show 17 new notifications">
               <Badge badgeContent={1} color="error">
-                <NotificationsIcon />
+                <Link to="/dashboard/notification">
+                  <NotificationsIcon />
+                </Link>
               </Badge>
             </IconButton>
             <IconButton

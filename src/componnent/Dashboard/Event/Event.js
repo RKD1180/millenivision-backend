@@ -59,15 +59,15 @@ const Event = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data?.event) {
-          setPageCount(Math.ceil(data?.count / limit));
-          setTotalEvents(data?.totalEvent);
-          setEventList(data?.event);
+          setPageCount(Math.ceil(data?.totalEvent / limit));
+          setTotalEvents(data.totalEvent);
+          setEventList(data.event);
         }
       });
     setIsLoading(false);
   }, [isLoading, inputUser, page, setIsLoading, userInfo?.user?.token]);
+
   const navigate = useNavigate();
   const userInfobee = getLocalStorage("userInfo");
   useEffect(() => {
@@ -178,7 +178,7 @@ const Event = () => {
         </TableBody>
       </Table>
       <div className="pagination">
-        {/* {console.log(pageCount)} */}
+        {console.log(pageCount)}
         {[...Array(pageCount).keys()].map((number) => (
           <button
             key={number + 1}

@@ -7,6 +7,9 @@ import Event from "./componnent/Dashboard/Event/Event";
 import CommunityList from "./componnent/Dashboard/CommunityList/CommunityList";
 import MobileNumber from "./componnent/MobileNumber/MobileNumber";
 import Otp from "./componnent/Otp/Otp";
+import Profile from "./componnent/Profile/Profile";
+import Notificaton from "./componnent/Notificaton/Notificaton";
+import ChangePassword from "./componnent/ChangePassword/ChangePassword";
 
 function App() {
   return (
@@ -21,6 +24,12 @@ function App() {
             <Route path="/dashboard/userlist" element={<UserList />} />
             <Route path="/dashboard/community" element={<Community />} />
             <Route path="/dashboard/event" element={<Event />} />
+            <Route path="/dashboard/profile" element={<Profile />} />
+            <Route path="/dashboard/notification" element={<Notificaton />} />
+            <Route
+              path="/dashboard/changepassword"
+              element={<ChangePassword />}
+            />
             <Route
               path="/dashboard/communitylist"
               element={<CommunityList />}

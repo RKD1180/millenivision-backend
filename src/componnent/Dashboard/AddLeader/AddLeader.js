@@ -36,7 +36,7 @@ const AddLeader = ({ open, handleClose }) => {
   const userInfo = getLocalStorage("userInfo");
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
+    fetch(`https://millenivision.herokuapp.com/users/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const AddLeader = ({ open, handleClose }) => {
   }, [userInfo?.user?.token, isLoading]);
 
   const handleMakeAdmin = (email) => {
-    fetch(`https://safe-journey-75946.herokuapp.com/users/makeAdmin/${email}`, {
+    fetch(`https://millenivision.herokuapp.com/users/makeAdmin/${email}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +67,7 @@ const AddLeader = ({ open, handleClose }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`https://safe-journey-75946.herokuapp.com/users/`, {
+    fetch(`https://millenivision.herokuapp.com/users/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

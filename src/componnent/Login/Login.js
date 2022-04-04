@@ -62,7 +62,7 @@ const Login = () => {
     const { email, password } = userData;
     e.preventDefault();
     if (email && password) {
-      fetch("https://safe-journey-75946.herokuapp.com/users/login", {
+      fetch("https://millenivision.herokuapp.com/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,12 +82,12 @@ const Login = () => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                authorization: `Bearer ${data.user?.token}`,
+                authorization: `Bearer ${userInfo?.user?.token}`,
               },
             })
               .then((res) => res.json())
               .then((data) => {
-                navigate("/otp");
+                navigate("/dashboard");
               });
           } else {
             setError(data.error);

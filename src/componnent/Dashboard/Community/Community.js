@@ -86,6 +86,7 @@ const Community = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data?.user) {
           setPageCount(Math.ceil(data?.count / limit));
           setTotalUser(data.totalUser);
